@@ -1,62 +1,37 @@
-function prompt(window, pref, message, callback) {
-    let branch = Components.classes["@mozilla.org/preferences-service;1"]
-                           .getService(Components.interfaces.nsIPrefBranch);
 
-    if (branch.getPrefType(pref) === branch.PREF_STRING) {
-        switch (branch.getCharPref(pref)) {
-        case "always":
-            return callback(true);
-        case "never":
-            return callback(false);
-        }
-    }
+function initMap() {
+var map = new google.maps.Map(document.getElementById('map'), {
+center: {lat: -34.397, lng: 150.644},
+zoom: 6
+});
+var infoWindow = new google.maps.InfoWindow({map: map});
 
-    let done = false;
+// Try HTML5 geolocation.
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    var pos = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
 
-    function remember(value, result) {
-        return function() {
-            done = true;
-            branch.setCharPref(pref, value);
-            callback(result);
-        }
-    }
-
-    let self = window.PopupNotifications.show(
-        window.gBrowser.selectedBrowser,
-        "geolocation",
-        message,
-        "geo-notification-icon",
-        {
-            label: "Share Location",
-            accessKey: "S",
-            callback: function(notification) {
-                done = true;
-                callback(true);
-            }
-        }, [
-            {
-                label: "Always Share",
-                accessKey: "A",
-                callback: remember("always", true)
-            },
-            {
-                label: "Never Share",
-                accessKey: "N",
-                callback: remember("never", false)
-            }
-        ], {
-            eventCallback: function(event) {
-                if (event === "dismissed") {
-                    if (!done) callback(false);
-                    done = true;
-                    window.PopupNotifications.remove(self);
-                }
-            },
-            persistWhileVisible: true
-        });
+    infoWindow.setPosition(pos);
+    infoWindow.setContent('Location found.');
+    map.setCenter(pos);
+  }, function() {
+    handleLocationError(true, infoWindow, map.getCenter());
+  });
+} else {
+  // Browser doesn't support Geolocation
+  handleLocationError(false, infoWindow, map.getCenter());
 }
 
-prompt(window,
-       "extensions.foo-addon.allowGeolocation",
-       "Foo Add-on wants to know your location.",
-       function callback(allowed) { alert(allowed); });
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+infoWindow.setPosition(pos);
+infoWindow.setContent(browserHasGeolocation ?
+'Error: The Geolocation service failed.' :
+'Error: Your browser doesn't support geolocation.');
+}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCd6BWtWT4bCD2zP-4l2qnBQXU__dIWcFc&v=3&callback=initMap"> </script> 
