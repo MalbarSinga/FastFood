@@ -1,6 +1,4 @@
 # FastFood
 ASSEMBLONS NOTRE ENERGIE
 Mettons chacun notre pierre à l'édifice
-
-
-merci de le pussher sur github
+MAINTENANT IL FAUT LE CONTRAIRE DE CE QUE LON A FAIT
