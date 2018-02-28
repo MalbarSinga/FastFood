@@ -1,5 +1,6 @@
 
 function initMap() {
+  //ici on a la geolocalisation de bagatelle
 var map = new google.maps.Map(document.getElementById('map'), {
 center: {lat: -34.397, lng: 150.644},
 zoom: 6
@@ -31,7 +32,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 infoWindow.setPosition(pos);
 infoWindow.setContent(browserHasGeolocation ?
 'Error: The Geolocation service failed.' :
-'Error: Your browser doesn't support geolocation.');
+'Error: Your browser doesn\'t support geolocation.');
 }
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCd6BWtWT4bCD2zP-4l2qnBQXU__dIWcFc&v=3&callback=initMap"> </script> 
